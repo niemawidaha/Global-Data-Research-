@@ -33,6 +33,11 @@ public class Global_EducationEnrolment {
      */
     private static void educationEnrollment_HighestGDP() throws IOException {
 
+
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("Education Enrollment - The countries with the Highest GDP");
+        System.out.println("The number of students enrolled in primary + tertiary education");
+        System.out.println("---------------------------------------------------------------------------");
         // create connection:
         // database code: UGID
         // item_country: ENROL_USA
@@ -89,6 +94,10 @@ public class Global_EducationEnrolment {
      */
     private static void educationEnrollment_LowestGDP() throws IOException {
 
+        System.out.println("---------------------------------------------------------------------------");
+        System.out.println("Education Enrollment - The countries with the Lowest GDP");
+        System.out.println("The number of students enrolled in primary + tertiary education");
+        System.out.println("---------------------------------------------------------------------------");
         // create connection:
         // database code: UGID
         // item_country: ENROL_USA
