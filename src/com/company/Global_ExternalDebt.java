@@ -11,35 +11,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Global_InternetPenetration {
-    public Global_InternetPenetration() throws IOException {
+public class Global_ExternalDebt {
 
-        // Display child mortality for worlds highest GDP's:
-        internetPenetration_HighestGDP();
+   public Global_ExternalDebt() throws IOException {
+       // gather external debt for nations with the lowest gdp:
+       externalDebt_LowestGDP();
 
-        // Display child mortality for worlds lowest GDP's
-        internetPenetration_LowestGDP();
+       // gather external debt for nations with the highest gdp:
+       // these countries don't have values:
+       // - Japan, USA, The UK and Germany
+       externalDebt_HighestGDP();
+   }
 
-        // THE VALUE FOR DRC -> DOESNT EXIST; I need to manually input it into the values
-    }
     /**
-     * internetPenetration_HighestGDP
-     * - displays the percentage of individuals using the internet for the countries with the highest GDP's
+     * externalDebt_LowestGDP
+     * - displays the external debt stocks for the countries with the lowest GDP
      */
-    private static void internetPenetration_HighestGDP() throws IOException {
+    private static void externalDebt_LowestGDP() throws IOException {
 
         System.out.println("---------------------------------------------------------------------------");
-        System.out.println("Internet Penetration - The countries with the Highest GDP");
-        System.out.println("This is the percentage of the population that's using the internet");
+        System.out.println("Total External Debt Owed by the countries with the Lowest GDP");
+        System.out.println("- This debt is owed to non-residents and repayable in:\nforeign currency, goods or services.");
+        System.out.println("- Total external debt is the sum of the public, publicly guaranteed,\n and private long term debt and use of IMF credit.");
+        System.out.println("- Short-term debt includes all debt having an original maturity.");
         System.out.println("---------------------------------------------------------------------------");
         // create connection
 
         // gather the urls for the top 5 countries
-        String[] urlList = {"https://www.quandl.com/api/v3/datasets/UGID/NETPEN_USA?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_CHN?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_DEU?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_JPN?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_GBR?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
+        String[] urlList = {"https://www.quandl.com/api/v3/datasets/UGID/IFDBT_HTI?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFDBT_COD?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFDBT_TZA?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFDBT_ZWE?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFDBT_ETH?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",};
 
         // iterate through string list to display the contents:
         for(String countryURL : urlList){
@@ -57,46 +60,48 @@ public class Global_InternetPenetration {
 
             // Manually Convert the response body InputStream to DataObject_ChildMortality using Jackson library
             ObjectMapper mapper = new ObjectMapper();
-            DataObject_InternetPenetration internetPenetration_Country = mapper.readValue(unitedNationsResponse,DataObject_InternetPenetration.class);
+            DataObject_ExternalDebt externalDebt_Country = mapper.readValue(unitedNationsResponse,DataObject_ExternalDebt.class);
 
             // Display the response:
-            System.out.println(internetPenetration_Country.getDataset().getName());
+            System.out.println(externalDebt_Country.getDataset().getName());
 
             // Display the child mortality rates:
 
             // PRINT: Date of obtained value
-            List<List<String>> internetPenetrationData = internetPenetration_Country.getDataset().getData(); // stores the population data for USA
+            List<List<String>> externalDebtData = externalDebt_Country.getDataset().getData(); // stores the population data for USA
 
             // first object is the date: at index 0
-            String internetPenetrationValues = internetPenetrationData.get(0).toString();
+            String externalDebtValue = externalDebtData.get(0).toString();
 
             // Display water and sanitation population data:
-            String netPenPopulationRate = "";
-            netPenPopulationRate = internetPenetrationValues.substring(13,17);
-            System.out.print(" -> Percentage of population using internet: " + netPenPopulationRate + "\n");
+            String externalDebt = "";
+            externalDebt = externalDebtValue.substring(13,26).replace("]","0");
+            System.out.print(" -> External Debt Owed: $ " + externalDebt + "\n");
             System.out.println();
         }
-    } // ends internetPenetration_HighestGDP
-
+    } // ends externalDebt_LowestGDP
 
     /**
-     * internetPenetration_LowestGDP
-     * - displays the percentage of individuals using the internet for the countries with the lowest GDP's
+     * externalDebt_LowestGDP
+     * - displays the external debt stocks for the countries with the lowest GDP
      */
-    private static void internetPenetration_LowestGDP() throws IOException {
+    private static void externalDebt_HighestGDP() throws IOException {
 
         System.out.println("---------------------------------------------------------------------------");
-        System.out.println("Internet Penetration - The countries with the Lowest GDP");
-        System.out.println("This is the percentage of the population that's using the internet");
+        System.out.println("Total External Debt Owed by the countries with the Highest GDP");
+        System.out.println("- This debt is owed to non-residents and repayable in:\nforeign currency, goods or services.");
+        System.out.println("- Total external debt is the sum of the public, publicly guaranteed,\n and private long term debt and use of IMF credit.");
+        System.out.println("- Short-term debt includes all debt having an original maturity.");
         System.out.println("---------------------------------------------------------------------------");
         // create connection
 
         // gather the urls for the top 5 countries
-        String[] urlList = {//"https://www.quandl.com/api/v3/datasets/UGID/NETPEN_COD?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_ETH?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_HTI?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_TZA?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_ZWE?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
+        String[] urlList = {//"https://www.quandl.com/api/v3/datasets/UGID/IFDBT_GBR?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFDBT_CHN?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                //"https://www.quandl.com/api/v3/datasets/UGID/IFDBT_JPN?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                // "https://www.quandl.com/api/v3/datasets/UGID/IFDBT_DEU?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                // "https://www.quandl.com/api/v3/datasets/UGID/IFDBT_USAstart_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+        };
 
         // iterate through string list to display the contents:
         for(String countryURL : urlList){
@@ -114,47 +119,47 @@ public class Global_InternetPenetration {
 
             // Manually Convert the response body InputStream to DataObject_ChildMortality using Jackson library
             ObjectMapper mapper = new ObjectMapper();
-            DataObject_InternetPenetration internetPenetration_Country = mapper.readValue(unitedNationsResponse,DataObject_InternetPenetration.class);
+            DataObject_ExternalDebt externalDebt_Country = mapper.readValue(unitedNationsResponse,DataObject_ExternalDebt.class);
 
             // Display the response:
-            System.out.println(internetPenetration_Country.getDataset().getName());
+            System.out.println(externalDebt_Country.getDataset().getName());
 
             // Display the child mortality rates:
 
             // PRINT: Date of obtained value
-            List<List<String>> internetPenetrationData = internetPenetration_Country.getDataset().getData(); // stores the population data for USA
+            List<List<String>> externalDebtData = externalDebt_Country.getDataset().getData(); // stores the population data for USA
 
             // first object is the date: at index 0
-            String internetPenetrationValues = internetPenetrationData.get(0).toString();
+            String externalDebtValue = externalDebtData.get(0).toString();
 
             // Display water and sanitation population data:
-            String netPenPopulationRate = "";
-            netPenPopulationRate = internetPenetrationValues.substring(13,17);
-            System.out.print(" -> Percentage of population using internet: " + netPenPopulationRate + "\n");
+            String externalDebt = "";
+            externalDebt = externalDebtValue.substring(13,26).replace("]","0");
+            System.out.print(" -> External Debt Owed: $ " + externalDebt + "\n");
             System.out.println();
         }
-    } // ends internetPenetration_LowestGDP
-
+    } // ends externalDebt_HighestGDP
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "dataset"
 })
-class DataObject_InternetPenetration {
+class DataObject_ExternalDebt {
 
     @JsonProperty("dataset")
-    private Dataset_InternetPenetration dataset;
+    private Dataset_ExternalDebt dataset;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("dataset")
-    public Dataset_InternetPenetration getDataset() {
+    public Dataset_ExternalDebt getDataset() {
         return dataset;
     }
 
     @JsonProperty("dataset")
-    public void setDataset(Dataset_InternetPenetration dataset) {
+    public void setDataset(Dataset_ExternalDebt dataset) {
         this.dataset = dataset;
     }
 
@@ -169,8 +174,9 @@ class DataObject_InternetPenetration {
     }
 
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
@@ -195,8 +201,7 @@ class DataObject_InternetPenetration {
         "order",
         "database_id"
 })
-
-class Dataset_InternetPenetration {
+class Dataset_ExternalDebt {
 
     @JsonProperty("id")
     private Integer id;

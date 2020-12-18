@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class Global_EducationEnrolment {
 
-    public static void main(String[] args) throws IOException {
+    public Global_EducationEnrolment() throws IOException {
 
         // Display education enrollment for worlds highest GDP's:
         educationEnrollment_HighestGDP();

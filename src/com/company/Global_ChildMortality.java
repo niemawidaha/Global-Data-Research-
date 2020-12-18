@@ -12,15 +12,14 @@ import java.util.Map;
 
 public class Global_ChildMortality {
 
-    public static void main(String[] args) throws IOException {
+   public Global_ChildMortality() throws IOException {
 
-        // Display child mortality for worlds highest GDP's:
-        childMortality_HighestGDP();
+       // Display child mortality for worlds highest GDP's:
+       childMortality_HighestGDP();
 
-        // Display child mortality for worlds lowest GDP's
-        childMortality_LowestGDP();
-
-    }
+       // Display child mortality for worlds lowest GDP's
+       childMortality_LowestGDP();
+   }
 
     /**
      * childMortality_HighestGDP

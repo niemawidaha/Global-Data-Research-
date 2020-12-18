@@ -11,35 +11,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Global_InternetPenetration {
-    public Global_InternetPenetration() throws IOException {
+public class Global_CurrencyReserves {
 
-        // Display child mortality for worlds highest GDP's:
-        internetPenetration_HighestGDP();
+    public Global_CurrencyReserves() throws IOException {
+        // Display currency reserves for worlds highest GDP's:
+        currencyReserves_HighestGDP();
 
-        // Display child mortality for worlds lowest GDP's
-        internetPenetration_LowestGDP();
-
-        // THE VALUE FOR DRC -> DOESNT EXIST; I need to manually input it into the values
+        // Display currency reserves for worlds lowest GDP's
+        currencyReserves_LowestGDP();
     }
+
     /**
-     * internetPenetration_HighestGDP
-     * - displays the percentage of individuals using the internet for the countries with the highest GDP's
+     * currencyReserves_HighestGDP
+     * - displays the the total currency reserves for the countries with the highest GDP's
      */
-    private static void internetPenetration_HighestGDP() throws IOException {
+    private static void currencyReserves_HighestGDP() throws IOException {
 
         System.out.println("---------------------------------------------------------------------------");
-        System.out.println("Internet Penetration - The countries with the Highest GDP");
-        System.out.println("This is the percentage of the population that's using the internet");
+        System.out.println("Currency Reserves - The countries with the Highest GDP");
+        System.out.println("This is the total value of the currency reserves minus gold.");
         System.out.println("---------------------------------------------------------------------------");
         // create connection
 
         // gather the urls for the top 5 countries
-        String[] urlList = {"https://www.quandl.com/api/v3/datasets/UGID/NETPEN_USA?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_CHN?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_DEU?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_JPN?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_GBR?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
+        String[] urlList = {"https://www.quandl.com/api/v3/datasets/UGID/IFSV_USA?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFSV_CHN?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFSV_DEU?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFSV_JPN?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFSV_GBR?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
 
         // iterate through string list to display the contents:
         for(String countryURL : urlList){
@@ -57,46 +56,50 @@ public class Global_InternetPenetration {
 
             // Manually Convert the response body InputStream to DataObject_ChildMortality using Jackson library
             ObjectMapper mapper = new ObjectMapper();
-            DataObject_InternetPenetration internetPenetration_Country = mapper.readValue(unitedNationsResponse,DataObject_InternetPenetration.class);
+            DataObject_CurrencyReserves currencyReserves_Country = mapper.readValue(unitedNationsResponse,DataObject_CurrencyReserves.class);
 
             // Display the response:
-            System.out.println(internetPenetration_Country.getDataset().getName());
+            System.out.println(currencyReserves_Country.getDataset().getName());
 
             // Display the child mortality rates:
 
             // PRINT: Date of obtained value
-            List<List<String>> internetPenetrationData = internetPenetration_Country.getDataset().getData(); // stores the population data for USA
+            List<List<String>> currencyReservesData = currencyReserves_Country.getDataset().getData(); // stores the population data for USA
 
             // first object is the date: at index 0
-            String internetPenetrationValues = internetPenetrationData.get(0).toString();
+            String currencyReserveValue = currencyReservesData.get(0).toString();
 
             // Display water and sanitation population data:
-            String netPenPopulationRate = "";
-            netPenPopulationRate = internetPenetrationValues.substring(13,17);
-            System.out.print(" -> Percentage of population using internet: " + netPenPopulationRate + "\n");
-            System.out.println();
+            String currencyReserve = "";
+            currencyReserve = currencyReserveValue.substring(13,27).replace(',','0');
+            if(currencyReserve.contains("null")){
+                System.out.println("The value for this doesn't exist in the United Nations Database");
+                System.out.println();
+            } else {
+                System.out.print(" -> Currency Reserve: $ " + currencyReserve + "\n");
+                System.out.println();
+            }
         }
-    } // ends internetPenetration_HighestGDP
-
+    } // ends currencyReserves_HighestGDP
 
     /**
-     * internetPenetration_LowestGDP
-     * - displays the percentage of individuals using the internet for the countries with the lowest GDP's
+     * currencyReserves_LowestGDP
+     * - displays the the total currency reserves for the countries with the highest GDP's
      */
-    private static void internetPenetration_LowestGDP() throws IOException {
+    private static void currencyReserves_LowestGDP() throws IOException {
 
         System.out.println("---------------------------------------------------------------------------");
-        System.out.println("Internet Penetration - The countries with the Lowest GDP");
-        System.out.println("This is the percentage of the population that's using the internet");
+        System.out.println("Currency Reserves - The countries with the Lowest GDP");
+        System.out.println("This is the total value of the currency reserves minus gold.");
         System.out.println("---------------------------------------------------------------------------");
         // create connection
 
         // gather the urls for the top 5 countries
-        String[] urlList = {//"https://www.quandl.com/api/v3/datasets/UGID/NETPEN_COD?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_ETH?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_HTI?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_TZA?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_ZWE?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
+        String[] urlList = {"https://www.quandl.com/api/v3/datasets/UGID/IFSV_COD?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFSV_HTI?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFSV_ZWE?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFSV_ETH?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                "https://www.quandl.com/api/v3/datasets/UGID/IFSV_TZA?start_date=2009-12-31&end_date=2009-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
 
         // iterate through string list to display the contents:
         for(String countryURL : urlList){
@@ -114,47 +117,51 @@ public class Global_InternetPenetration {
 
             // Manually Convert the response body InputStream to DataObject_ChildMortality using Jackson library
             ObjectMapper mapper = new ObjectMapper();
-            DataObject_InternetPenetration internetPenetration_Country = mapper.readValue(unitedNationsResponse,DataObject_InternetPenetration.class);
+            DataObject_CurrencyReserves currencyReserves_Country = mapper.readValue(unitedNationsResponse,DataObject_CurrencyReserves.class);
 
             // Display the response:
-            System.out.println(internetPenetration_Country.getDataset().getName());
+            System.out.println(currencyReserves_Country.getDataset().getName());
 
             // Display the child mortality rates:
 
             // PRINT: Date of obtained value
-            List<List<String>> internetPenetrationData = internetPenetration_Country.getDataset().getData(); // stores the population data for USA
+            List<List<String>> currencyReservesData = currencyReserves_Country.getDataset().getData(); // stores the population data for USA
 
             // first object is the date: at index 0
-            String internetPenetrationValues = internetPenetrationData.get(0).toString();
+            String currencyReserveValue = currencyReservesData.get(0).toString();
 
             // Display water and sanitation population data:
-            String netPenPopulationRate = "";
-            netPenPopulationRate = internetPenetrationValues.substring(13,17);
-            System.out.print(" -> Percentage of population using internet: " + netPenPopulationRate + "\n");
-            System.out.println();
+            String currencyReserve = "";
+            currencyReserve = currencyReserveValue.substring(13,27).replace(',','0');
+            if(currencyReserve.contains("null")){
+                System.out.println("The value for this doesn't exist in the United Nations Database");
+                System.out.println();
+            } else {
+                System.out.print(" -> Currency Reserve: $ " + currencyReserve + "\n");
+                System.out.println();
+            }
         }
-    } // ends internetPenetration_LowestGDP
-
+    } // ends currencyReserves_HighestGDP
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "dataset"
 })
-class DataObject_InternetPenetration {
+class DataObject_CurrencyReserves {
 
     @JsonProperty("dataset")
-    private Dataset_InternetPenetration dataset;
+    private Dataset_CurrencyReserves dataset;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("dataset")
-    public Dataset_InternetPenetration getDataset() {
+    public Dataset_CurrencyReserves getDataset() {
         return dataset;
     }
 
     @JsonProperty("dataset")
-    public void setDataset(Dataset_InternetPenetration dataset) {
+    public void setDataset(Dataset_CurrencyReserves dataset) {
         this.dataset = dataset;
     }
 
@@ -167,10 +174,9 @@ class DataObject_InternetPenetration {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
-
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
@@ -195,8 +201,7 @@ class DataObject_InternetPenetration {
         "order",
         "database_id"
 })
-
-class Dataset_InternetPenetration {
+class Dataset_CurrencyReserves {
 
     @JsonProperty("id")
     private Integer id;
@@ -464,3 +469,5 @@ class Dataset_InternetPenetration {
     }
 
 }
+
+

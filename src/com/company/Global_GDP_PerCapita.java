@@ -6,155 +6,112 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Global_InternetPenetration {
-    public Global_InternetPenetration() throws IOException {
+public class Global_GDP_PerCapita {
 
-        // Display child mortality for worlds highest GDP's:
-        internetPenetration_HighestGDP();
-
-        // Display child mortality for worlds lowest GDP's
-        internetPenetration_LowestGDP();
-
-        // THE VALUE FOR DRC -> DOESNT EXIST; I need to manually input it into the values
+    public Global_GDP_PerCapita() throws IOException {
+        calculateGDP();
     }
-    /**
-     * internetPenetration_HighestGDP
-     * - displays the percentage of individuals using the internet for the countries with the highest GDP's
-     */
-    private static void internetPenetration_HighestGDP() throws IOException {
 
-        System.out.println("---------------------------------------------------------------------------");
-        System.out.println("Internet Penetration - The countries with the Highest GDP");
-        System.out.println("This is the percentage of the population that's using the internet");
-        System.out.println("---------------------------------------------------------------------------");
-        // create connection
-
-        // gather the urls for the top 5 countries
-        String[] urlList = {"https://www.quandl.com/api/v3/datasets/UGID/NETPEN_USA?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_CHN?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_DEU?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_JPN?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_GBR?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
-
-        // iterate through string list to display the contents:
-        for(String countryURL : urlList){
-
-            URL unitedNationsURL = new URL(countryURL);
-
-            // Open connection on the URL + cast its response
-            HttpURLConnection unitedNationsConnection = (HttpURLConnection)unitedNationsURL.openConnection();
-
-            // Now that it's open, we can set the request method, headers etc:
-            unitedNationsConnection.setRequestProperty("accept","application/json");
-
-            // Make the request to open the stream
-            InputStream unitedNationsResponse = unitedNationsConnection.getInputStream();
-
-            // Manually Convert the response body InputStream to DataObject_ChildMortality using Jackson library
-            ObjectMapper mapper = new ObjectMapper();
-            DataObject_InternetPenetration internetPenetration_Country = mapper.readValue(unitedNationsResponse,DataObject_InternetPenetration.class);
-
-            // Display the response:
-            System.out.println(internetPenetration_Country.getDataset().getName());
-
-            // Display the child mortality rates:
-
-            // PRINT: Date of obtained value
-            List<List<String>> internetPenetrationData = internetPenetration_Country.getDataset().getData(); // stores the population data for USA
-
-            // first object is the date: at index 0
-            String internetPenetrationValues = internetPenetrationData.get(0).toString();
-
-            // Display water and sanitation population data:
-            String netPenPopulationRate = "";
-            netPenPopulationRate = internetPenetrationValues.substring(13,17);
-            System.out.print(" -> Percentage of population using internet: " + netPenPopulationRate + "\n");
-            System.out.println();
-        }
-    } // ends internetPenetration_HighestGDP
-
+    public static void calculateGDP() throws IOException {
+        // GDP FOR all countries: top 5 and lowest 5 GDPs
+        GDP();
+    }
 
     /**
-     * internetPenetration_LowestGDP
-     * - displays the percentage of individuals using the internet for the countries with the lowest GDP's
+     * GDP(): Retreives the GDP for the countries with the highest and lowest GDP's
      */
-    private static void internetPenetration_LowestGDP() throws IOException {
+    public static void GDP() throws IOException {
+        // https://www.quandl.com/api/v3/datasets/UNAE/GDPKD_GBR?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w
 
-        System.out.println("---------------------------------------------------------------------------");
-        System.out.println("Internet Penetration - The countries with the Lowest GDP");
-        System.out.println("This is the percentage of the population that's using the internet");
-        System.out.println("---------------------------------------------------------------------------");
-        // create connection
+            System.out.println("---------------------------------------------------------------------------");
+            System.out.println("GDP - The countries with the Highest + Lowest GDP");
+            System.out.println("Gross Domestic Product");
+            System.out.println("---------------------------------------------------------------------------");
+            // create connection
 
-        // gather the urls for the top 5 countries
-        String[] urlList = {//"https://www.quandl.com/api/v3/datasets/UGID/NETPEN_COD?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_ETH?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_HTI?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_TZA?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
-                "https://www.quandl.com/api/v3/datasets/UGID/NETPEN_ZWE?start_date=2014-12-31&end_date=2014-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
+            // gather the urls for the top 5 countries
+            String[] urlList = {"https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_USA?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    "https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_CHN?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    "https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_JPN?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    "https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_DEU?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    "https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_GBR?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    "https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_COD?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    //"https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_TZA?start_date=2000-12-31&end_date=2000-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    "https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_ETH?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    "https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_HTI?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w",
+                    "https://www.quandl.com/api/v3/datasets/UNAE/GDPCDPC_ZWE?start_date=2018-12-31&end_date=2018-12-31&api_key=zMyy5kAH2HSPkRRVco4w"};
 
-        // iterate through string list to display the contents:
-        for(String countryURL : urlList){
+            // iterate through string list to display the contents:
+            for(String countryURL : urlList){
 
-            URL unitedNationsURL = new URL(countryURL);
+                URL unitedNationsURL = new URL(countryURL);
 
-            // Open connection on the URL + cast its response
-            HttpURLConnection unitedNationsConnection = (HttpURLConnection)unitedNationsURL.openConnection();
+                // Open connection on the URL + cast its response
+                HttpURLConnection unitedNationsConnection = (HttpURLConnection)unitedNationsURL.openConnection();
 
-            // Now that it's open, we can set the request method, headers etc:
-            unitedNationsConnection.setRequestProperty("accept","application/json");
+                // Now that it's open, we can set the request method, headers etc:
+                unitedNationsConnection.setRequestProperty("accept","application/json");
 
-            // Make the request to open the stream
-            InputStream unitedNationsResponse = unitedNationsConnection.getInputStream();
+                // Make the request to open the stream
+                InputStream unitedNationsResponse = unitedNationsConnection.getInputStream();
 
-            // Manually Convert the response body InputStream to DataObject_ChildMortality using Jackson library
-            ObjectMapper mapper = new ObjectMapper();
-            DataObject_InternetPenetration internetPenetration_Country = mapper.readValue(unitedNationsResponse,DataObject_InternetPenetration.class);
+                // Manually Convert the response body InputStream to DataObject_ChildMortality using Jackson library
+                ObjectMapper mapper = new ObjectMapper();
+                DataObject_GDPPerCapita GDP_Country = mapper.readValue(unitedNationsResponse,DataObject_GDPPerCapita.class);
 
-            // Display the response:
-            System.out.println(internetPenetration_Country.getDataset().getName());
+                // Display the response:
+                System.out.println(GDP_Country.getDataset().getName());
 
-            // Display the child mortality rates:
+                // Display the child mortality rates:
 
-            // PRINT: Date of obtained value
-            List<List<String>> internetPenetrationData = internetPenetration_Country.getDataset().getData(); // stores the population data for USA
+                // PRINT: Date of obtained value
+                List<List<String>> GDP_Data = GDP_Country.getDataset().getData(); // stores the population data for USA
 
-            // first object is the date: at index 0
-            String internetPenetrationValues = internetPenetrationData.get(0).toString();
+                // first object is the date: at index 0
+                String GDP_Value = GDP_Data.get(0).toString();
 
-            // Display water and sanitation population data:
-            String netPenPopulationRate = "";
-            netPenPopulationRate = internetPenetrationValues.substring(13,17);
-            System.out.print(" -> Percentage of population using internet: " + netPenPopulationRate + "\n");
-            System.out.println();
-        }
-    } // ends internetPenetration_LowestGDP
+
+                // Display water and sanitation population data:
+                String GDP = "";
+                GDP = GDP_Value.substring(13,20).replace(']','0');
+                if(GDP.contains("null")){
+                    System.out.println("The value for this doesn't exist in the United Nations Database");
+                    System.out.println();
+                } else {
+                    System.out.print(" -> GDP based on USD: $ " + GDP + "\n");
+                    System.out.println();
+                }
+            }
+    }
+
 
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "dataset"
 })
-class DataObject_InternetPenetration {
+class DataObject_GDPPerCapita {
 
     @JsonProperty("dataset")
-    private Dataset_InternetPenetration dataset;
+    private Dataset_GDPPerCapita dataset;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("dataset")
-    public Dataset_InternetPenetration getDataset() {
+    public Dataset_GDPPerCapita getDataset() {
         return dataset;
     }
 
     @JsonProperty("dataset")
-    public void setDataset(Dataset_InternetPenetration dataset) {
+    public void setDataset(Dataset_GDPPerCapita dataset) {
         this.dataset = dataset;
     }
 
@@ -171,6 +128,7 @@ class DataObject_InternetPenetration {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "id",
@@ -195,8 +153,7 @@ class DataObject_InternetPenetration {
         "order",
         "database_id"
 })
-
-class Dataset_InternetPenetration {
+class Dataset_GDPPerCapita {
 
     @JsonProperty("id")
     private Integer id;
@@ -464,3 +421,5 @@ class Dataset_InternetPenetration {
     }
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////

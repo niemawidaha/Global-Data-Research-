@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Global_WaterSanitation {
 
-    public static void main(String[] args) throws IOException {
+    public Global_WaterSanitation() throws IOException {
 
         // Display water and sanitation statistics for the worlds highest GDP's:
         waterSanitation_HighestGDP();
@@ -75,7 +75,7 @@ public class Global_WaterSanitation {
             waterPopulationRate = waterSanitationValues.substring(13,18);
             System.out.print(" -> Improved Water %: " + waterPopulationRate + "\n");
 
-            sanitationPopulationRate = waterSanitationValues.substring(19,24);
+            sanitationPopulationRate = waterSanitationValues.substring(19,24).replace(']', '0');
             System.out.print(" -> Improved Sanitation %: " + sanitationPopulationRate + "\n");
             System.out.println();
         }
